@@ -24,7 +24,7 @@ function renderHistory() {
   const history = loadHistory();
   history.slice().reverse().forEach((entry) => {
     const row = document.createElement('div');
-    row.className = 'card-panel white z-depth-1';
+    //row.className = 'card-panel white z-depth-1';
 
     const lettersDiv = document.createElement('div');
     lettersDiv.className = 'letters';
@@ -36,12 +36,7 @@ function renderHistory() {
       lettersDiv.appendChild(span);
     });
 
-    const meta = document.createElement('div');
-    meta.className = 'grey-text text-darken-1';
-    meta.textContent = entry.isCorrect ? 'Correct' : 'Incorrect';
-
     row.appendChild(lettersDiv);
-    row.appendChild(meta);
     container.appendChild(row);
   });
 }
@@ -80,7 +75,8 @@ async function submitGuess() {
   renderHistory();
 
   if (data.newWord) {
-    M.toast({ html: data.isCorrect ? 'Correct! New word set.' : 'No guesses left; new word set.' });
+    M.toast({ html: data.isCorrect ? 'Correct! New word set.' : 'No guesses left; new word set.' });    
+    localStorage.removeItem(HISTORY_KEY);
   } else {
     M.toast({ html: `Remaining: ${data.remaining}` });
   }
