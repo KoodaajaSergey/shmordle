@@ -1,0 +1,38 @@
+/* letter status styles */
+.letter-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin: 0 6px 6px 0;
+  border-radius: 6px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.correct {
+  background-color: #4caf50; /* green */
+  color: white;
+}
+.incorrect {
+  background-color: #9e9e9e; /* gray */
+  color: white;
+}
+.wrong-position {
+  background-color: #ffc107; /* amber */
+  color: rgba(0,0,0,0.87);
+}
+
+.card-panel .letters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* General layout tweaks */
+body .card { border-radius: 12px; }
+.card-title { font-weight: 700; }
+#history { margin-top: 1rem; }
