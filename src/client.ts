@@ -1,6 +1,8 @@
+declare const M: any;
+
 type Letter = { letter: string; status: string };
 
-type GuessResult = { letters: Letter[]; isCorrect: boolean };
+type GuessResult = { letters: Letter[]; isCorrect: boolean; newWord?: boolean; remaining?: number };
 
 const HISTORY_KEY = 'guessHistory_v1';
 
@@ -47,14 +49,27 @@ function renderHistory() {
 // submit guess to server and store history
 async function submitGuess() {
   const input = document.getElementById('guessInput') as HTMLInputElement;
+  const result = document.getElementById('guessResult') as HTMLElement;
+  result.innerHTML = '';
+
   const value = input.value.trim();
-  if (!value) return;
+  if (!/^[a-zA-Z]{5}$/.test(value)) {
+    M.toast({ html: 'Please enter a 5-letter word' });
+    return;
+  }
 
   const resp = await fetch('/guess', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ word: value })
   });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    M.toast({ html: err.error || 'Server error' });
+    return;
+  }
+
   const data: GuessResult = await resp.json();
 
   const history = loadHistory();
@@ -63,6 +78,20 @@ async function submitGuess() {
   if (history.length > 50) history.shift();
   saveHistory(history);
   renderHistory();
+
+  // render letters result
+  data.letters.forEach((letter) => {
+    const span = document.createElement('span');
+    span.textContent = letter.letter.toUpperCase();
+    span.className = letter.status;
+    result.appendChild(span);
+  });
+
+  if (data.newWord) {
+    M.toast({ html: data.isCorrect ? 'Correct! New word set.' : 'No guesses left; new word set.' });
+  } else {
+    M.toast({ html: `Remaining: ${data.remaining}` });
+  }
 }
 
 document.getElementById('guessBtn')!.addEventListener('click', submitGuess);
