@@ -49,10 +49,10 @@ function renderHistory() {
 // submit guess to server and store history
 async function submitGuess() {
   const input = document.getElementById('guessInput') as HTMLInputElement;
-  const result = document.getElementById('guessResult') as HTMLElement;
-  result.innerHTML = '';
 
   const value = input.value.trim();
+  // empty the input immediately for better UX
+  input.value = '';
   if (!/^[a-zA-Z]{5}$/.test(value)) {
     M.toast({ html: 'Please enter a 5-letter word' });
     return;
@@ -78,14 +78,6 @@ async function submitGuess() {
   if (history.length > 50) history.shift();
   saveHistory(history);
   renderHistory();
-
-  // render letters result
-  data.letters.forEach((letter) => {
-    const span = document.createElement('span');
-    span.textContent = letter.letter.toUpperCase();
-    span.className = letter.status;
-    result.appendChild(span);
-  });
 
   if (data.newWord) {
     M.toast({ html: data.isCorrect ? 'Correct! New word set.' : 'No guesses left; new word set.' });

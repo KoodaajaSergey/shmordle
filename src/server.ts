@@ -14,7 +14,7 @@ const combined = [...wordles, ...nonwordles].sort();
 const MAX_ATTEMPTS = 6;
 
 function pickRandomWord() {
-  return combined[Math.floor(Math.random() * combined.length)];
+  return wordles[Math.floor(Math.random() * wordles.length)];
 }
 
 let currentWord = pickRandomWord();
